@@ -9,9 +9,9 @@ const create = async (req, res) => {
   if (user) {
     return res.status(500).send({ error: "User already exists" });
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ email, password: hashedPassword });
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
     res.json({ message: "Signed up successfully.", token: token });
