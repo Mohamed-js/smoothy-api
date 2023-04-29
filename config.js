@@ -7,7 +7,7 @@ require("dotenv").config();
 
 function startServer() {
   const app = express();
-  app.use(cors({ origin: "https://openfabric-test.vercel.app/" }));
+  app.use(cors({ origin: "https://openfabric-test.vercel.app" }));
   app.use("/uploads", express.static("uploads"));
   app.use(express.json());
   app.use(routes);
