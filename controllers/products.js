@@ -42,8 +42,6 @@ const update = async (req, res) => {
       new: true,
     });
 
-    console.log(req.body, "\n", req.query, "\n");
-
     await product.save();
     res.send({ message: "Product updated.", product: product });
   } catch (error) {
