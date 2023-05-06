@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { index, show, create, update } = require("../controllers/products");
 const auth = require("../middlewares/auth");
-const imageUploader = require("../middlewares/imageUploader");
+// const imageUploader = require("../middlewares/imageUploader");
 
 const router = Router();
 router.get("/products", index);
