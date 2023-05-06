@@ -10,7 +10,7 @@ require("dotenv").config();
 function startServer() {
   const app = express();
   app.use(cors({ origin: "*" }));
-  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+  // app.use("/uploads", express.static(path.join(__dirname, "uploads")));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(routes);
