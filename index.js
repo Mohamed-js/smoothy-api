@@ -15,16 +15,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(routes);
 
 try {
-  mongoose.connect(process.env.DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  mongoose.connect(
+    "mongodb+srv://atefhamosa:Lwwmt_zh967Cxh.@cluster0.q4thba8.mongodb.net/?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
 } catch (e) {
   console.log(e);
 }
 
-app.listen(3000, () => {
-  console.log(`listening on port ${3000}`);
-});
+// app.listen(3000, () => {
+//   console.log(`listening on port ${3000}`);
+// });
 
 module.exports = app;
