@@ -1,5 +1,5 @@
 const imageUrlFormatter = (req) =>
-  `${req.protocol}://${req.get("host")}/uploads/products/${req.file.filename}`;
+  `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
 
 const formatErrorFor = (err, model) => {
   let errMessage = {};
@@ -14,4 +14,8 @@ const formatErrorFor = (err, model) => {
   return errMessage;
 };
 
-module.exports = { formatErrorFor, imageUrlFormatter };
+const slugify = (title) => {
+  return title.toLowerCase().split(" ").join("-");
+};
+
+module.exports = { formatErrorFor, imageUrlFormatter, slugify };
