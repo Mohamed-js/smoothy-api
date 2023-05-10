@@ -1,5 +1,12 @@
-const { imageUrlFormatter } = require("../helpers");
+const { slugify } = require("../helpers");
+const cloudinary = require("cloudinary").v2;
 const Product = require("../models/product");
+
+cloudinary.config({
+  cloud_name: "atefcloud",
+  api_key: "824336462488539",
+  api_secret: "pEGHRdxPduNoMq8eWAu3c361h7E",
+});
 
 const index = async (req, res) => {
   const products = await Product.find({});
@@ -21,9 +28,12 @@ const show = async (req, res, next) => {
 
 const create = async (req, res) => {
   try {
+    const response = await cloudinary.uploader.upload(req.file.path, {
+      public_id: slugify(req.body.title),
+    });
     const product = new Product({
       ...req.body,
-      image: imageUrlFormatter(req),
+      image: response.secure_url,
     });
 
     await product.save();

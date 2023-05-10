@@ -1,4 +1,4 @@
-const { imageUrlFormatter, slugify } = require("../helpers");
+const { slugify } = require("../helpers");
 const BlogPost = require("../models/blogpost");
 
 const index = async (req, res) => {
@@ -21,10 +21,13 @@ const show = async (req, res, next) => {
 
 const create = async (req, res) => {
   try {
+    const response = await cloudinary.uploader.upload(req.file.path, {
+      public_id: slugify(req.body.title),
+    });
     const blogPost = new BlogPost({
       ...req.body,
       slug: slugify(req.body.title),
-      image: imageUrlFormatter(req),
+      image: response.secure_url,
       body: JSON.parse(req.body.body),
     });
 
