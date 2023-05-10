@@ -5,7 +5,7 @@ const imageUploader = require("../middlewares/imageUploader");
 
 const router = Router();
 router.get("/products", index);
-router.get("/products/:id", show);
+router.get("/products/:slug", show);
 router.post("/products", imageUploader.single("image"), create);
 router.patch("/products/:id", update);
 

@@ -1,3 +1,5 @@
+const cloudinary = require("cloudinary").v2;
+
 const imageUrlFormatter = (req) =>
   `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
 
@@ -18,4 +20,13 @@ const slugify = (title) => {
   return title.toLowerCase().split(" ").join("-");
 };
 
-module.exports = { formatErrorFor, imageUrlFormatter, slugify };
+const initCloudinary = () => {
+  cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+  });
+  return cloudinary;
+};
+
+module.exports = { formatErrorFor, imageUrlFormatter, slugify, initCloudinary };

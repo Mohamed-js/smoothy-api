@@ -16,8 +16,8 @@ const create = async (req, res) => {
     const user = await User.create({ email, password: hashedPassword });
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
     res.json({ message: "Signed up successfully.", token: token });
-  } catch (err) {
-    res.status(500).json({ errors: formatErrorFor(err, "user") });
+  } catch (e) {
+    res.status(500).json({ errors: formatErrorFor(e, "user") });
   }
 };
 

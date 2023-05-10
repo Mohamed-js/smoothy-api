@@ -7,6 +7,12 @@ const ProductSchema = new mongoose.Schema({
     lowercase: true,
     minlength: [3, "Product name must not be less than 3 characters."],
   },
+  slug: {
+    type: String,
+    required: true,
+    lowercase: true,
+    minlength: [3, "Product name must not be less than 3 characters."],
+  },
   price: {
     type: Number,
     required: true,

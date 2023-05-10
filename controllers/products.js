@@ -1,38 +1,33 @@
-const { slugify } = require("../helpers");
-const cloudinary = require("cloudinary").v2;
+const { slugify, initCloudinary } = require("../helpers");
 const Product = require("../models/product");
-
-cloudinary.config({
-  cloud_name: "atefcloud",
-  api_key: "824336462488539",
-  api_secret: "pEGHRdxPduNoMq8eWAu3c361h7E",
-});
 
 const index = async (req, res) => {
   const products = await Product.find({});
   try {
     res.send(products);
-  } catch (error) {
-    res.status(500).send(error);
+  } catch (e) {
+    res.status(500).send(e);
   }
 };
 
-const show = async (req, res, next) => {
-  const products = await Product.findById(req.params.id);
+const show = async (req, res) => {
+  const products = await Product.findOne({ slug: req.params.slug });
   try {
     res.send(products);
-  } catch (error) {
-    res.status(500).send(error);
+  } catch (e) {
+    res.status(500).send(e);
   }
 };
 
 const create = async (req, res) => {
+  const cloudinary = initCloudinary();
   try {
     const response = await cloudinary.uploader.upload(req.file.path, {
       public_id: slugify(req.body.title),
     });
     const product = new Product({
       ...req.body,
+      slug: slugify(req.body.title),
       image: response.secure_url,
     });
 
@@ -54,8 +49,8 @@ const update = async (req, res) => {
 
     await product.save();
     res.send({ message: "Product updated.", product: product });
-  } catch (error) {
-    res.status(500).send(error);
+  } catch (e) {
+    res.status(500).send(e);
   }
 };
 

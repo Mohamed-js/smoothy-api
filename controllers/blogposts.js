@@ -1,25 +1,26 @@
-const { slugify } = require("../helpers");
+const { slugify, initCloudinary } = require("../helpers");
 const BlogPost = require("../models/blogpost");
 
 const index = async (req, res) => {
   const blogPosts = await BlogPost.find({});
   try {
     res.send(blogPosts);
-  } catch (error) {
-    res.status(500).send(error);
+  } catch (e) {
+    res.status(500).send(e);
   }
 };
 
-const show = async (req, res, next) => {
-  const blogPosts = await BlogPost.findById(req.params.id);
+const show = async (req, res) => {
+  const blogPost = await BlogPost.findOne({ slug: req.params.slug });
   try {
-    res.send(blogPosts);
-  } catch (error) {
-    res.status(500).send(error);
+    res.send(blogPost);
+  } catch (e) {
+    res.status(500).send(e);
   }
 };
 
 const create = async (req, res) => {
+  const cloudinary = initCloudinary();
   try {
     const response = await cloudinary.uploader.upload(req.file.path, {
       public_id: slugify(req.body.title),
