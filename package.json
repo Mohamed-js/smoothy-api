@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A self-care products site.",
   "main": "index.js",
+  "engines": {
+    "node": ">=16.20"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
