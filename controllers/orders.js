@@ -14,8 +14,6 @@ const create = async (req, res) => {
     const user = await getUser(req);
     const cartItems = user.cart_items;
 
-    console.log(req.body);
-
     const order = new Order({
       items: cartItems,
       status: "pending",

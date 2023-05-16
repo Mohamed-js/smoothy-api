@@ -1,7 +1,22 @@
-const { slugify, initCloudinary } = require("../helpers");
+const { slugify, initCloudinary, uploadImage } = require("../helpers");
 const BlogPost = require("../models/blogpost");
+const View = require("../models/view");
 
 const index = async (req, res) => {
+  // const views = await View.aggregate([
+  //   {
+  //     $match: {
+  //       blogpost: { $exists: true },
+  //     },
+  //   },
+  //   {
+  //     $group: {
+  //       _id: "$blogpost",
+  //       viewsCount: { $sum: 1 },
+  //     },
+  //   },
+  // ]);
+  // res.send(views);
   const blogPosts = await BlogPost.find({});
   try {
     res.send(blogPosts);
@@ -20,15 +35,12 @@ const show = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const cloudinary = initCloudinary();
   try {
-    const response = await cloudinary.uploader.upload(req.file.path, {
-      public_id: slugify(req.body.title),
-    });
+    const image_url = await uploadImage(req);
     const blogPost = new BlogPost({
       ...req.body,
       slug: slugify(req.body.title),
-      image: response.secure_url,
+      image: image_url,
       body: JSON.parse(req.body.body),
     });
 
