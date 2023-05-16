@@ -1,4 +1,5 @@
 const cloudinary = require("cloudinary").v2;
+const env = process.env.NODE_ENV || "development";
 
 const imageUrlFormatter = (req) =>
   `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
@@ -29,4 +30,22 @@ const initCloudinary = () => {
   return cloudinary;
 };
 
-module.exports = { formatErrorFor, imageUrlFormatter, slugify, initCloudinary };
+const uploadImage = async (req) => {
+  const cloudinary = initCloudinary();
+  let image_url = imageUrlFormatter(req);
+  if (env !== "development") {
+    const response = await cloudinary.uploader.upload(req.file.path, {
+      public_id: slugify(req.body.title),
+    });
+    image_url = response.secure_url;
+  }
+  return image_url;
+};
+
+module.exports = {
+  formatErrorFor,
+  imageUrlFormatter,
+  slugify,
+  initCloudinary,
+  uploadImage,
+};

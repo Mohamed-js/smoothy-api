@@ -1,5 +1,6 @@
-const { slugify, initCloudinary } = require("../helpers");
+const { slugify, uploadImage } = require("../helpers");
 const Product = require("../models/product");
+const env = process.env.NODE_ENV || "development";
 
 const index = async (req, res) => {
   const products = await Product.find({});
@@ -20,15 +21,12 @@ const show = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const cloudinary = initCloudinary();
   try {
-    const response = await cloudinary.uploader.upload(req.file.path, {
-      public_id: slugify(req.body.title),
-    });
+    const image_url = await uploadImage(req);
     const product = new Product({
       ...req.body,
       slug: slugify(req.body.title),
-      image: response.secure_url,
+      image: image_url,
     });
 
     await product.save();
