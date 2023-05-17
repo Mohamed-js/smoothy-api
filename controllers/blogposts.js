@@ -1,4 +1,4 @@
-const { slugify, initCloudinary, uploadImage } = require("../helpers");
+const { slugify, uploadImage } = require("../helpers");
 const BlogPost = require("../models/blogpost");
 const View = require("../models/view");
 
