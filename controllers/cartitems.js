@@ -1,8 +1,12 @@
 const User = require("../models/user");
 
 const index = async (req, res) => {
-  const user = await getUser(req);
-  res.send(user.cart_items);
+  try {
+    const user = await getUser(req);
+    res.send(user.cart_items);
+  } catch (e) {
+    res.send({ error: e });
+  }
 };
 
 const create = async (req, res) => {
