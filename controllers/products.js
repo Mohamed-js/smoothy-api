@@ -35,36 +35,4 @@ const show = async (req, res) => {
   }
 };
 
-const create = async (req, res) => {
-  try {
-    const image_url = await uploadImage(req);
-    const product = new Product({
-      ...req.body,
-      slug: slugify(req.body.title),
-      image: image_url,
-    });
-
-    await product.save();
-    res.send({ message: "Product created.", product: product });
-  } catch (e) {
-    if (e.code) {
-      res.status(500).send("hey");
-    }
-    res.status(500).send("hey2");
-  }
-};
-
-const update = async (req, res) => {
-  try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-
-    await product.save();
-    res.send({ message: "Product updated.", product: product });
-  } catch (e) {
-    res.status(500).send(e);
-  }
-};
-
-module.exports = { index, show, create, update };
+module.exports = { index, show };

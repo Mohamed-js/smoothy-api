@@ -7,6 +7,9 @@ const blogposts = require("./blogposts");
 const cartitems = require("./cartitems");
 const orders = require("./orders");
 
+// Admin requires
+const adminProducts = require("./admin/products");
+
 const app = express();
 
 app.use(registrations);
@@ -15,6 +18,9 @@ app.use(products);
 app.use(blogposts);
 app.use(cartitems);
 app.use(orders);
+
+// Admin routes
+app.use("/admin", [adminProducts]);
 
 // Set the root
 app.get("/", (req, res) => {
