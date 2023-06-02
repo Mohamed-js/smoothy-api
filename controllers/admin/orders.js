@@ -15,4 +15,21 @@ const index = async (req, res) => {
   res.send(users);
 };
 
-module.exports = { index };
+const update = async (req, res) => {
+  try {
+    const product = await Order.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      {
+        new: true,
+      }
+    );
+
+    await product.save();
+    res.send({ message: "Order updated.", product: product });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
+module.exports = { index, update };

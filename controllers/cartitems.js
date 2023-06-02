@@ -11,18 +11,19 @@ const index = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const user = await getUser(req);
+    let user = await getUser(req);
     const x = user.cart_items.findIndex((item) => {
       return item.product._id.toString() === req.body.product;
     });
-    if (x >= 0) {
+
+    if (x !== -1) {
       user.cart_items[x].quantity += Number(req.body.quantity);
     } else {
       user.cart_items = [...user.cart_items, req.body];
-      user.populate("cart_items.product");
     }
 
     await user.save();
+    user = await getUser(req);
 
     res.send({
       message: "Successfully Added",
@@ -42,6 +43,7 @@ const patch = async (req, res) => {
     if (x >= 0) {
       user.cart_items[x].quantity -= 1;
     }
+
     await user.save();
     res.send({ message: "Successfully Minused", cart_items: user.cart_items });
   } catch (e) {
@@ -55,6 +57,7 @@ const destroy = async (req, res) => {
     const cartItems = user.cart_items.filter(
       (item) => item.product._id.toString() != req.params.id
     );
+
     user.cart_items = cartItems;
     await user.save();
     res.send({

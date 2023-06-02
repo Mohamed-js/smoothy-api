@@ -1,5 +1,6 @@
 const Order = require("../models/order");
 const User = require("../models/user");
+const { getIO } = require("../socket");
 
 const index = async (req, res) => {
   const user = await User.findById(req.userId).populate("orders");
@@ -31,7 +32,10 @@ const create = async (req, res) => {
     user.orders.push(order._id);
 
     await user.save();
-
+    // Emit to admins
+    const io = getIO();
+    io.emit("new-order");
+    // Send ok to user
     res.send({
       message: "Successfully Placed Order",
     });
