@@ -22,6 +22,11 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     minlength: [3, "Product description must not be less than 3 characters."],
   },
+  ar_description: {
+    type: String,
+    required: true,
+    minlength: [3, "Product description must not be less than 3 characters."],
+  },
   image: {
     type: String,
   },
