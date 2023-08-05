@@ -18,8 +18,9 @@ const index = async (req, res) => {
   //   },
   // ]);
   // res.send(views);
-  const products = await Product.find({});
+
   try {
+    const products = await Product.find({});
     res.send(products);
   } catch (e) {
     res.status(500).send(e);
@@ -27,8 +28,8 @@ const index = async (req, res) => {
 };
 
 const show = async (req, res) => {
-  const products = await Product.findOne({ slug: req.params.slug });
   try {
+    const products = await Product.findOne({ slug: req.params.slug });
     res.send(products);
   } catch (e) {
     res.status(500).send(e);

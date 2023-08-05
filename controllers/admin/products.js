@@ -3,24 +3,22 @@ const Product = require("../../models/product");
 const View = require("../../models/view");
 
 const index = async (req, res) => {
-  const views = await View.aggregate([
-    {
-      $match: {
-        product: { $exists: true },
-      },
-    },
-    {
-      $group: {
-        _id: "$product",
-        product: { $last: "$product" },
-        views: { $sum: 1 },
-      },
-    },
-  ]);
-
-  const products = await Product.populate(views, { path: "product" });
-
   try {
+    const views = await View.aggregate([
+      {
+        $match: {
+          product: { $exists: true },
+        },
+      },
+      {
+        $group: {
+          _id: "$product",
+          product: { $last: "$product" },
+          views: { $sum: 1 },
+        },
+      },
+    ]);
+    const products = await Product.populate(views, { path: "product" });
     res.send(products);
   } catch (e) {
     res.status(500).send(e);
@@ -28,8 +26,8 @@ const index = async (req, res) => {
 };
 
 const show = async (req, res) => {
-  const products = await Product.findOne({ _id: req.params.id });
   try {
+    const products = await Product.findOne({ _id: req.params.id });
     res.send(products);
   } catch (e) {
     res.status(500).send(e);
