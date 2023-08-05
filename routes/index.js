@@ -6,6 +6,7 @@ const products = require("./products");
 const blogposts = require("./blogposts");
 const cartitems = require("./cartitems");
 const orders = require("./orders");
+const auth = require("./auth");
 
 // Admin requires
 const adminProducts = require("./admin/products");
@@ -20,6 +21,7 @@ app.use(products);
 app.use(blogposts);
 app.use(cartitems);
 app.use(orders);
+app.use(auth);
 
 // Admin routes
 app.use("/admin", [adminProducts, adminUsers, adminOrders]);
