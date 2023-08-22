@@ -12,11 +12,9 @@ const auth = require("./auth");
 const adminProducts = require("./admin/products");
 const adminUsers = require("./admin/users");
 const adminOrders = require("./admin/orders");
-const { connectDB, closeSequelizeConnection } = require("../config");
 
 const app = express();
 
-app.use(connectDB);
 app.use(registrations);
 app.use(sessions);
 app.use(products);
@@ -24,13 +22,11 @@ app.use(products);
 app.use(UserProducts);
 app.use(orders);
 app.use(auth);
-app.use(closeSequelizeConnection);
 
 // Admin routes
 app.use("/admin", [adminProducts, adminUsers, adminOrders]);
 
 // Set the root
-
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });

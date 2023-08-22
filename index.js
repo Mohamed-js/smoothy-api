@@ -5,7 +5,7 @@ const routes = require("./routes");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
-const { connectDB, sequelize } = require("./config");
+// const { connectDB, sequelize } = require("./config");
 const { initializeSocket } = require("./socket");
 
 const app = express();
