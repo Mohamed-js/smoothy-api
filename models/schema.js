@@ -275,13 +275,13 @@ View.belongsTo(BlogPost, {
 });
 
 // SYNC ALL
-BlogPost.sync();
-Order.sync();
-OrderItem.sync();
-Product.sync();
-User.sync();
-UserProduct.sync();
-View.sync();
+// BlogPost.sync();
+// Order.sync();
+// OrderItem.sync();
+// Product.sync();
+// User.sync();
+// UserProduct.sync();
+// View.sync();
 
 // EXPORT ALL
 module.exports = {
