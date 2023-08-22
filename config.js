@@ -1,7 +1,15 @@
 const { Sequelize } = require("sequelize");
+const { Pool } = require("pg");
 
 const sequelize = new Sequelize(
-  "postgres://ptevpxcm:wydrFH4MYg0kEePAJwuaQTsKp39UzpAP@hansken.db.elephantsql.com/ptevpxcm"
+  "postgres://ptevpxcm:wydrFH4MYg0kEePAJwuaQTsKp39UzpAP@hansken.db.elephantsql.com/ptevpxcm",
+  {
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000,
+    },
+  }
 );
 
 const connectDB = async () => {
