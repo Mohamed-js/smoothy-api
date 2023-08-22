@@ -12,13 +12,22 @@ const sequelize = new Sequelize(
   }
 );
 
-const connectDB = async () => {
+const connectDB = async (req, res, next) => {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
+  next();
 };
 
-module.exports = { connectDB, sequelize };
+function closeSequelizeConnection(req, res, next) {
+  res.on("finish", () => {
+    console.log("Connection has been closed successfully.");
+    sequelize.close(); // Close the connection after response is sent
+  });
+  next();
+}
+
+module.exports = { connectDB, sequelize, closeSequelizeConnection };

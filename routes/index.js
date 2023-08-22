@@ -12,10 +12,11 @@ const auth = require("./auth");
 const adminProducts = require("./admin/products");
 const adminUsers = require("./admin/users");
 const adminOrders = require("./admin/orders");
-const { sequelize } = require("../config");
+const { connectDB, closeSequelizeConnection } = require("../config");
 
 const app = express();
 
+app.use(connectDB);
 app.use(registrations);
 app.use(sessions);
 app.use(products);
@@ -35,10 +36,3 @@ app.get("/", (req, res) => {
 });
 
 module.exports = app;
-
-function closeSequelizeConnection(req, res, next) {
-  res.on("finish", () => {
-    sequelize.close(); // Close the connection after response is sent
-  });
-  next();
-}

@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(routes);
 
 try {
-  connectDB();
+  // connectDB();
   app.listen(3000, () => console.log(`Listening on port ${3000}`));
 } catch (e) {
   console.log(e);
