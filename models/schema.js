@@ -239,6 +239,10 @@ Product.belongsToMany(Order, {
   foreignKey: "ProductId",
 });
 
+Order.belongsTo(User, {
+  foreignKey: "UserId",
+});
+
 Order.belongsToMany(Product, {
   through: OrderItem,
   foreignKey: "OrderId",
@@ -258,9 +262,6 @@ User.hasMany(Order, {
   foreignKey: "UserId",
 });
 
-Order.belongsTo(User, {
-  foreignKey: "UserId",
-});
 View.belongsTo(User, {
   foreignKey: "user_id",
 });

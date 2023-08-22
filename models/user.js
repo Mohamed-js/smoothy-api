@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config");
-const Product = require("./product"); // Import the Product Sequelize model
-const Order = require("./order"); // Import the Order Sequelize model
-const UserProduct = require("./userproduct");
+const { Product } = require("./schema"); // Import the Product Sequelize model
+const { Order } = require("./schema"); // Import the Order Sequelize model
+const { UserProduct } = require("./schema");
 
 const User = sequelize.define("user", {
   id: {

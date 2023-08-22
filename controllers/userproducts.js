@@ -1,6 +1,6 @@
-const UserProduct = require("../models/userproduct");
-const Product = require("../models/product");
-const User = require("../models/user");
+const { UserProduct } = require("../models/schema");
+const { Product } = require("../models/schema");
+const { User } = require("../models/schema");
 
 const index = async (req, res) => {
   try {

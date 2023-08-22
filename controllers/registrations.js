@@ -1,5 +1,5 @@
 const { formatErrorFor } = require("../helpers");
-const User = require("../models/user");
+const { User } = require("../models/schema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
