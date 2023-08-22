@@ -2,7 +2,7 @@ const { Sequelize } = require("sequelize");
 const { Pool } = require("pg");
 
 const sequelize = new Sequelize(
-  "postgres://ptevpxcm:wydrFH4MYg0kEePAJwuaQTsKp39UzpAP@hansken.db.elephantsql.com/ptevpxcm",
+  "postgres://broiiuai:AvlmGnsEmy0oImAr1OQFTAgFpKPZmrml@dumbo.db.elephantsql.com/broiiuai",
   {
     pool: {
       max: 5,
