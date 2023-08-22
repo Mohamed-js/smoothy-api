@@ -1,8 +1,11 @@
-const { UserProduct } = require("../models/schema");
-const { Order } = require("../models/schema");
-const { OrderItem } = require("../models/schema");
-const { Product } = require("../models/schema");
-const { User } = require("../models/schema");
+const {
+  UserProduct,
+  User,
+  Order,
+  OrderItem,
+  Product,
+} = require("../models/schema");
+
 const { getIO } = require("../socket");
 
 const index = async (req, res) => {

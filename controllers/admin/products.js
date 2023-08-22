@@ -1,6 +1,5 @@
 const { slugify, uploadImage } = require("../../helpers");
-const { Product } = require("../../models/schema");
-const { View } = require("../../models/schema");
+const { Product, View } = require("../../models/schema");
 
 const index = async (req, res) => {
   try {

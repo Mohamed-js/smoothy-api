@@ -1,6 +1,5 @@
 const { slugify, uploadImage } = require("../helpers");
-const { BlogPost } = require("../models/schema");
-const { View } = require("../models/schema");
+const { BlogPost, View } = require("../models/schema");
 
 const index = async (req, res) => {
   // const views = await View.aggregate([
