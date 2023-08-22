@@ -1,24 +1,33 @@
+const UserProduct = require("../models/userproduct");
 const Order = require("../models/order");
+const OrderItem = require("../models/orderitem");
+const Product = require("../models/product");
 const User = require("../models/user");
 const { getIO } = require("../socket");
 
 const index = async (req, res) => {
-  const user = await User.findById(req.userId).populate("orders");
-  await user.populate("orders.items.product");
-
-  res.send(user.orders);
+  const userWithOrders = await User.findByPk(req.userId, {
+    include: {
+      model: Order,
+      include: {
+        model: OrderItem,
+        include: Product,
+      },
+    },
+  });
+  res.send(userWithOrders);
 };
 
-// Order status my be [pending, complete, closed]
 const create = async (req, res) => {
   try {
     const user = await getUser(req);
-    const cartItems = user.cart_items;
 
-    const order = new Order({
-      items: cartItems,
+    const UserProducts = user.products();
+
+    const order = Order.create({
+      items: UserProducts,
       status: "pending",
-      user: req.userId,
+      user_id: req.userId,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       country: req.body.country,
@@ -28,8 +37,11 @@ const create = async (req, res) => {
     });
     order.save();
 
-    user.cart_items = [];
-    user.orders.push(order._id);
+    await UserProduct.destroy({
+      where: {
+        user_id: req.userId,
+      },
+    });
 
     await user.save();
     // Emit to admins
@@ -47,10 +59,10 @@ const create = async (req, res) => {
 // const destroy = async (req, res) => {
 //   try {
 //     const user = await getUser(req);
-//     const cartItems = user.cart_items.filter(
+//     const UserProducts = user.cart_items.filter(
 //       (item) => item.product._id.toString() != req.params.id
 //     );
-//     user.cart_items = cartItems;
+//     user.cart_items = UserProducts;
 //     await user.save();
 //     res.send({
 //       message: "Successfully Removed",
@@ -64,5 +76,9 @@ const create = async (req, res) => {
 module.exports = { index, create };
 
 const getUser = async (req) => {
-  return await User.findById(req.userId);
+  return await User.findByPk(req.userId, {
+    include: {
+      model: Product,
+    },
+  });
 };

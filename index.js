@@ -1,11 +1,11 @@
 require("dotenv").config();
-
+const { Sequelize, Op, Model, DataTypes } = require("sequelize");
 const express = require("express");
 const routes = require("./routes");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
-const { connectDB } = require("./config");
+const { connectDB, sequelize } = require("./config");
 const { initializeSocket } = require("./socket");
 
 const app = express();
@@ -18,7 +18,6 @@ app.use(routes);
 
 try {
   connectDB();
-  // initializeSocket();
   app.listen(3000, () => console.log(`Listening on port ${3000}`));
 } catch (e) {
   console.log(e);

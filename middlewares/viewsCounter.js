@@ -11,37 +11,41 @@ const viewsCounter = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.SECRET_KEY);
       const userId = decoded.userId;
       const visited = await getVisitedId(req);
-      if (visited.site === "homepage") {
-        var view = new View({
-          user: userId,
-          isHomePage: true,
-          ip: req.ip,
-        });
-        view.save();
-      } else {
-        const { id, site } = visited;
-        var view = new View({
-          user: userId,
-          [site]: id,
-          ip: req.ip,
-        });
-        view.save();
+      if (visited) {
+        if (visited.site === "homepage") {
+          var view = new View({
+            user: userId,
+            isHomePage: true,
+            ip: req.ip,
+          });
+          view.save();
+        } else {
+          const { id, site } = visited;
+          var view = new View({
+            user: userId,
+            [site]: id,
+            ip: req.ip,
+          });
+          view.save();
+        }
       }
     } else {
       const visited = await getVisitedId(req);
-      if (visited.site === "homepage") {
-        var view = new View({
-          isHomePage: true,
-          ip: req.ip,
-        });
-        view.save();
-      } else {
-        const { id, site } = visited;
-        var view = new View({
-          [site]: id,
-          ip: req.ip,
-        });
-        view.save();
+      if (visited) {
+        if (visited.site === "homepage") {
+          var view = new View({
+            isHomePage: true,
+            ip: req.ip,
+          });
+          view.save();
+        } else {
+          const { id, site } = visited;
+          var view = new View({
+            [site]: id,
+            ip: req.ip,
+          });
+          view.save();
+        }
       }
     }
 
@@ -54,18 +58,23 @@ const viewsCounter = async (req, res, next) => {
 
 async function getVisitedId(req) {
   if (req.url.startsWith("/products/")) {
-    const product = await Product.findOne({ slug: req.params.slug });
-    return {
-      site: "product",
-      id: product._id,
-    };
+    const product = await Product.findOne({ where: { slug: req.params.slug } });
+
+    if (product)
+      return {
+        site: "product",
+        id: product.id,
+      };
   }
   if (req.url.startsWith("/blogposts/")) {
-    const blogPost = await BlogPost.findOne({ slug: req.params.slug });
-    return {
-      site: "blogpost",
-      id: blogPost._id,
-    };
+    const blogPost = await BlogPost.findOne({
+      where: { slug: req.params.slug },
+    });
+    if (blogPost)
+      return {
+        site: "blogpost",
+        id: blogPost._id,
+      };
   }
 
   return {

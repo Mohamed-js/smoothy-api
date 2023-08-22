@@ -1,41 +1,59 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config");
 
-const BlogPostSchema = new mongoose.Schema(
+const BlogPost = sequelize.define(
+  "blog_post",
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      field: "BlogPostId",
+      autoIncrement: true,
+    },
     title: {
-      type: String,
-      required: true,
+      type: DataTypes.STRING,
+      allowNull: false,
       lowercase: true,
-      minlength: [5, "Blog Post name must not be less than 3 characters."],
+      validate: {
+        len: {
+          args: [5],
+          msg: "Blog Post name must not be less than 5 characters.",
+        },
+      },
     },
     slug: {
-      type: String,
-      required: true,
+      type: DataTypes.STRING,
+      allowNull: false,
       lowercase: true,
-      minlength: [5, "Blog Post name must not be less than 3 characters."],
+      validate: {
+        len: {
+          args: [5],
+          msg: "Blog Post name must not be less than 5 characters.",
+        },
+      },
     },
     image: {
-      type: String,
+      type: DataTypes.STRING,
     },
     description: {
-      type: String,
-      required: true,
-      minlength: [
-        5,
-        "Blog Post description must not be less than 3 characters.",
-      ],
-    },
-    body: [
-      {
-        image: String,
-        title: String,
-        body: String,
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [5],
+          msg: "Blog Post description must not be less than 5 characters.",
+        },
       },
-    ],
+    },
+    body: {
+      type: DataTypes.ARRAY(DataTypes.JSONB), // You can also use TEXT instead of JSONB
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-const BlogPost = mongoose.model("BlogPost", BlogPostSchema);
+BlogPost.sync();
 
 module.exports = BlogPost;

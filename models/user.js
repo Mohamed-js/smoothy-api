@@ -1,37 +1,58 @@
-const mongoose = require("mongoose");
-const { isEmail } = require("validator");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config");
+const Product = require("./product"); // Import the Product Sequelize model
+const Order = require("./order"); // Import the Order Sequelize model
+const UserProduct = require("./userproduct");
 
-const UserSchema = new mongoose.Schema({
+const User = sequelize.define("user", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    field: "UserId",
+    autoIncrement: true,
+  },
   email: {
-    type: String,
-    required: [true, "Email is required."],
+    type: DataTypes.STRING,
+    allowNull: false,
     unique: true,
-    lowercase: true,
-    validate: [isEmail, "Please enter a valid email."],
+    validate: {
+      isEmail: {
+        msg: "Please enter a valid email.",
+      },
+    },
   },
   password: {
-    type: String,
-    required: [true, "Password is required."],
-    minlength: [6, "Password must not be less than 6 characters."],
+    type: DataTypes.STRING,
+    allowNull: false,
+    set(value) {
+      if (value.length >= 6) {
+        this.setDataValue("password", value);
+      } else {
+        throw new Error("Your password should be more than 6 characters!");
+      }
+    },
   },
-  cart_items: [
-    {
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-      },
-      quantity: Number,
-      options: Map,
-    },
-  ],
-  orders: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
-    },
-  ],
 });
 
-const User = mongoose.model("User", UserSchema);
+// Define the association to Product for cart items
+User.belongsToMany(Product, {
+  through: UserProduct,
+  foreignKey: "UserId",
+});
 
+Product.belongsToMany(User, {
+  through: UserProduct,
+  foreignKey: "ProductId",
+});
+
+// Define the association to Order
+User.hasMany(Order, {
+  foreignKey: "UserId",
+});
+
+Order.belongsTo(User, {
+  foreignKey: "UserId",
+});
+
+User.sync();
 module.exports = User;

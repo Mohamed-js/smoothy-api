@@ -66,4 +66,15 @@ const update = async (req, res) => {
   }
 };
 
-module.exports = { index, show, create, update };
+const destroy = async (req, res) => {
+  try {
+    const product = await Product.findByPk(req.params.id);
+
+    await product.destroy();
+    res.send({ message: "Product deleted." });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
+module.exports = { index, show, create, update, destroy };

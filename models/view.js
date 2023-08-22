@@ -1,28 +1,44 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config");
+const User = require("./user"); // Import the User Sequelize model
+const Product = require("./product"); // Import the Product Sequelize model
+const BlogPost = require("./blogpost"); // Import the BlogPost Sequelize model
 
-const ViewSchema = new mongoose.Schema(
+const View = sequelize.define(
+  "view",
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    product: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-    },
-    blogpost: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "BlogPost",
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      field: "ViewId",
+      autoIncrement: true,
     },
     isHomePage: {
-      type: Boolean,
-      default: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
-    ip: String,
+    ip: {
+      type: DataTypes.STRING,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-const View = mongoose.model("View", ViewSchema);
+// Define associations with User, Product, and BlogPost
+View.belongsTo(User, {
+  foreignKey: "user_id",
+});
+
+View.belongsTo(Product, {
+  foreignKey: "product_id",
+});
+
+View.belongsTo(BlogPost, {
+  foreignKey: "blogpost_id",
+});
+
+View.sync();
 
 module.exports = View;

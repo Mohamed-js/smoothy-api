@@ -1,5 +1,10 @@
 const { Router } = require("express");
-const { index, create, destroy, patch } = require("../controllers/cartitems");
+const {
+  index,
+  create,
+  destroy,
+  patch,
+} = require("../controllers/userproducts");
 const auth = require("../middlewares/auth");
 
 const router = Router();

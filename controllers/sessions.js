@@ -6,7 +6,8 @@ const create = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
+
     if (!user) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
@@ -16,7 +17,7 @@ const create = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
+    const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY);
 
     res.json({ message: "Logged in successfully.", token });
   } catch (e) {

@@ -1,15 +1,16 @@
-const mongoose = require("mongoose");
-const env = process.env.NODE_ENV || "development";
+const { Sequelize } = require("sequelize");
 
-const connectDB = () => {
-  mongoose.connect(
-    // env === "development" ? "mongodb://localhost:27017" : process.env.DB_URL,
-    process.env.DB_URL,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  );
+const sequelize = new Sequelize(
+  "postgres://ptevpxcm:wydrFH4MYg0kEePAJwuaQTsKp39UzpAP@hansken.db.elephantsql.com/ptevpxcm"
+);
+
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 };
 
-module.exports = { connectDB };
+module.exports = { connectDB, sequelize };

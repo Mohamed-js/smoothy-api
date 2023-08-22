@@ -1,26 +1,8 @@
-const { slugify, uploadImage } = require("../helpers");
 const Product = require("../models/product");
-const View = require("../models/view");
-const env = process.env.NODE_ENV || "development";
 
 const index = async (req, res) => {
-  // const views = await View.aggregate([
-  //   {
-  //     $match: {
-  //       product: { $exists: true },
-  //     },
-  //   },
-  //   {
-  //     $group: {
-  //       _id: "$product",
-  //       viewsCount: { $sum: 1 },
-  //     },
-  //   },
-  // ]);
-  // res.send(views);
-
   try {
-    const products = await Product.find({});
+    const products = await Product.findAll();
     res.send(products);
   } catch (e) {
     res.status(500).send(e);
@@ -29,7 +11,9 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const products = await Product.findOne({ slug: req.params.slug });
+    const products = await Product.findOne({
+      where: { slug: req.params.slug },
+    });
     res.send(products);
   } catch (e) {
     res.status(500).send(e);

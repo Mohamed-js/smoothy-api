@@ -6,14 +6,9 @@ const imageUrlFormatter = (req) =>
 
 const formatErrorFor = (err, model) => {
   let errMessage = {};
-  if (err.code === 11000) {
-    errMessage.email = "Email already exists.";
-  }
-  if (err.message.includes(`${model} validation failed`)) {
-    Object.values(err.errors).forEach(({ properties }) => {
-      errMessage[properties.path] = properties.message;
-    });
-  }
+  err.errors.forEach((e) => {
+    errMessage[e.path] = e.message;
+  });
   return errMessage;
 };
 
@@ -33,7 +28,8 @@ const initCloudinary = () => {
 const uploadImage = async (req) => {
   const cloudinary = initCloudinary();
   let image_url = imageUrlFormatter(req);
-  if (env !== "development") {
+  // if (env !== "development") {
+  if (true) {
     const response = await cloudinary.uploader.upload(req.file.path, {
       public_id: slugify(req.body.title),
     });
