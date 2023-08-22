@@ -1,4 +1,4 @@
-const Order = require("../../models/order");
+const { Order } = require("../../models/schema");
 
 const index = async (req, res) => {
   const users = await Order.find({}).populate([

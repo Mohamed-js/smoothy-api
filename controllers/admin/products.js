@@ -1,6 +1,6 @@
 const { slugify, uploadImage } = require("../../helpers");
-const Product = require("../../models/product");
-const View = require("../../models/view");
+const { Product } = require("../../models/schema");
+const { View } = require("../../models/schema");
 
 const index = async (req, res) => {
   try {
@@ -49,7 +49,7 @@ const create = async (req, res) => {
     if (e.code) {
       res.status(500).send("hey");
     }
-    res.status(500).send("hey2");
+    res.status(500).send(e);
   }
 };
 
