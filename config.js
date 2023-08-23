@@ -5,7 +5,7 @@ const sequelize = new Sequelize(
   "postgres://broiiuai:CzfRVM0UD3TZLHImonkNLY0_W_EOPrWu@dumbo.db.elephantsql.com/broiiuai",
   {
     pool: {
-      max: 5,
+      max: 20,
       min: 0,
       idle: 10000,
     },
