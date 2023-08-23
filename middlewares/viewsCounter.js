@@ -1,5 +1,5 @@
-const BlogPost = require("../models/blogpost");
-const Product = require("../models/product");
+// const { BlogPost } = require("../models/blogpost");
+const { Product } = require("../models/schema");
 const { View } = require("../models/schema");
 const jwt = require("jsonwebtoken");
 
@@ -13,38 +13,34 @@ const viewsCounter = async (req, res, next) => {
       const visited = await getVisitedId(req);
       if (visited) {
         if (visited.site === "homepage") {
-          var view = new View({
+          View.create({
             user: userId,
             isHomePage: true,
             ip: req.ip,
           });
-          view.save();
         } else {
           const { id, site } = visited;
-          var view = new View({
+          View.create({
             user: userId,
             [site]: id,
             ip: req.ip,
           });
-          view.save();
         }
       }
     } else {
       const visited = await getVisitedId(req);
       if (visited) {
         if (visited.site === "homepage") {
-          var view = new View({
+          View.create({
             isHomePage: true,
             ip: req.ip,
           });
-          view.save();
         } else {
           const { id, site } = visited;
-          var view = new View({
+          View.create({
             [site]: id,
             ip: req.ip,
           });
-          view.save();
         }
       }
     }
@@ -66,16 +62,16 @@ async function getVisitedId(req) {
         id: product.id,
       };
   }
-  if (req.url.startsWith("/blogposts/")) {
-    const blogPost = await BlogPost.findOne({
-      where: { slug: req.params.slug },
-    });
-    if (blogPost)
-      return {
-        site: "blogpost",
-        id: blogPost._id,
-      };
-  }
+  // if (req.url.startsWith("/blogposts/")) {
+  //   const blogPost = await BlogPost.findOne({
+  //     where: { slug: req.params.slug },
+  //   });
+  //   if (blogPost)
+  //     return {
+  //       site: "blogpost",
+  //       id: blogPost._id,
+  //     };
+  // }
 
   return {
     site: "homepage",
