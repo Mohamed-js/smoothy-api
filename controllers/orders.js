@@ -25,10 +25,29 @@ const create = async (req, res) => {
   try {
     const user = await getUser(req);
 
-    const userProducts = user.products();
-
-    const order = Order.create({
-      user_id: req.userId,
+    const userProducts = await UserProduct.findAll({
+      where: {
+        UserId: user.id,
+      },
+      include: [
+        {
+          model: Product,
+        },
+      ],
+    });
+    console.log("userProducts");
+    console.log("userProducts");
+    console.log("userProducts");
+    console.log("userProducts");
+    console.log("userProducts");
+    console.log(userProducts);
+    console.log("userProducts");
+    console.log("userProducts");
+    console.log("userProducts");
+    console.log("userProducts");
+    console.log("userProducts");
+    const order = await Order.create({
+      user_id: user.id,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       country: req.body.country,
@@ -36,15 +55,16 @@ const create = async (req, res) => {
       phone: req.body.phone,
       address: req.body.address,
     });
-    userProducts.forEach((item) => {
-      OrderItem.create({
+
+    userProducts.forEach(async (item) => {
+      const orderItem = await OrderItem.create({
         OrderId: order.id,
         ProductId: item.ProductId,
         quantity: item.quantity,
         options: item.options,
       });
+      console.log(orderItem);
     });
-    order.save();
 
     await UserProduct.destroy({
       where: {
@@ -52,13 +72,12 @@ const create = async (req, res) => {
       },
     });
 
-    await user.save();
     // Emit to admins
     const io = getIO();
     io.emit("new-order");
     // Send ok to user
     res.send({
-      message: "Successfully Placed Order",
+      sad: "Successfully Placed Order",
     });
   } catch (e) {
     res.send({ error: e });

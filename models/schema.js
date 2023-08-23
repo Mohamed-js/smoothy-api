@@ -259,6 +259,10 @@ Product.belongsToMany(User, {
   foreignKey: "ProductId",
 });
 
+UserProduct.belongsTo(Product, {
+  foreignKey: "ProductId",
+});
+
 User.hasMany(Order, {
   foreignKey: "UserId",
 });
