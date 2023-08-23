@@ -25,11 +25,9 @@ const create = async (req, res) => {
   try {
     const user = await getUser(req);
 
-    const UserProducts = user.products();
+    const userProducts = user.products();
 
     const order = Order.create({
-      items: UserProducts,
-      status: "pending",
       user_id: req.userId,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -38,11 +36,19 @@ const create = async (req, res) => {
       phone: req.body.phone,
       address: req.body.address,
     });
+    userProducts.forEach((item) => {
+      OrderItem.create({
+        OrderId: order.id,
+        ProductId: item.ProductId,
+        quantity: item.quantity,
+        options: item.options,
+      });
+    });
     order.save();
 
     await UserProduct.destroy({
       where: {
-        user_id: req.userId,
+        UserId: req.userId,
       },
     });
 

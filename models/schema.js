@@ -65,6 +65,7 @@ const Order = sequelize.define(
     },
     status: {
       type: DataTypes.STRING,
+      defaultValue: "pending",
     },
     UserId: {
       type: DataTypes.INTEGER,

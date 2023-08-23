@@ -1,6 +1,6 @@
 const BlogPost = require("../models/blogpost");
 const Product = require("../models/product");
-const View = require("../models/view");
+const { View } = require("../models/schema");
 const jwt = require("jsonwebtoken");
 
 const viewsCounter = async (req, res, next) => {
