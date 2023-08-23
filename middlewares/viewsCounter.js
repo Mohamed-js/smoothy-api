@@ -13,31 +13,15 @@ const viewsCounter = async (req, res, next) => {
       const visited = await getVisitedId(req);
       if (visited) {
         if (visited.site === "homepage") {
-          View.create({
-            user: userId,
+          await View.create({
+            UserId: userId,
             isHomePage: true,
             ip: req.ip,
           });
         } else {
           const { id, site } = visited;
-          View.create({
-            user: userId,
-            [site]: id,
-            ip: req.ip,
-          });
-        }
-      }
-    } else {
-      const visited = await getVisitedId(req);
-      if (visited) {
-        if (visited.site === "homepage") {
-          View.create({
-            isHomePage: true,
-            ip: req.ip,
-          });
-        } else {
-          const { id, site } = visited;
-          View.create({
+          await View.create({
+            UserId: userId,
             [site]: id,
             ip: req.ip,
           });
@@ -58,7 +42,7 @@ async function getVisitedId(req) {
 
     if (product)
       return {
-        site: "product",
+        site: "ProductId",
         id: product.id,
       };
   }
@@ -73,9 +57,9 @@ async function getVisitedId(req) {
   //     };
   // }
 
-  return {
-    site: "homepage",
-  };
+  // return {
+  //   site: "homepage",
+  // };
 }
 
 module.exports = viewsCounter;
