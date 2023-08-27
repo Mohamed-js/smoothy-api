@@ -77,7 +77,7 @@ const create = async (req, res) => {
     io.emit("new-order");
     // Send ok to user
     res.send({
-      sad: "Successfully Placed Order",
+      message: "Successfully Placed Order",
     });
   } catch (e) {
     res.send({ error: e });
