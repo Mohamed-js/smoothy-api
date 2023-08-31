@@ -3,21 +3,23 @@ const { Product, View } = require("../../models/schema");
 
 const index = async (req, res) => {
   try {
-    const views = await View.aggregate([
-      {
-        $match: {
-          product: { $exists: true },
+    const views = await View.findAll({
+      where: {
+        product: {
+          [Op.not]: null,
         },
       },
-      {
-        $group: {
-          _id: "$product",
-          product: { $last: "$product" },
-          views: { $sum: 1 },
-        },
+      attributes: ["product", [sequelize.fn("sum", 1), "views"]],
+      group: ["product"],
+    });
+
+    const productIds = views.map((view) => view.product);
+    const products = await Product.findAll({
+      where: {
+        id: productIds,
       },
-    ]);
-    const products = await Product.populate(views, { path: "product" });
+    });
+
     res.send(products);
   } catch (e) {
     res.status(500).send(e);
@@ -26,8 +28,8 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const products = await Product.findOne({ _id: req.params.id });
-    res.send(products);
+    const product = await Product.findByPk(req.params.id);
+    res.send(product);
   } catch (e) {
     res.status(500).send(e);
   }
@@ -35,14 +37,13 @@ const show = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const image_url = await uploadImage(req);
-    const product = new Product({
+    const image_url = await uploadImage(req); // Assuming you have the uploadImage function defined
+    const product = await Product.create({
       ...req.body,
       slug: slugify(req.body.title),
       image: image_url,
     });
 
-    await product.save();
     res.send({ message: "Product created.", product: product });
   } catch (e) {
     if (e.code) {
@@ -54,11 +55,14 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const product = await Product.findByPk(req.params.id);
 
-    await product.save();
+    if (!product) {
+      return res.status(404).send({ message: "Product not found." });
+    }
+
+    await product.update(req.body);
+
     res.send({ message: "Product updated.", product: product });
   } catch (e) {
     res.status(500).send(e);
@@ -68,6 +72,10 @@ const update = async (req, res) => {
 const destroy = async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id);
+
+    if (!product) {
+      return res.status(404).send({ message: "Product not found." });
+    }
 
     await product.destroy();
     res.send({ message: "Product deleted." });

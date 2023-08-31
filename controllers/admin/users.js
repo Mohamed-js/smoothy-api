@@ -1,19 +1,25 @@
-const { User } = require("../../models/schema");
+const { User, Order, Product } = require("../../models/schema");
 
 const index = async (req, res) => {
-  const users = await User.find({});
-  // .populate([
-  //   {
-  //     path: "orders",
-  //     model: "Order",
-  //     populate: {
-  //       path: "items.product",
-  //       model: "Product",
-  //     },
-  //   },
-  // ]);
+  try {
+    const users = await User.findAll({
+      include: [
+        {
+          model: Order,
+          // include: [
+          //   {
+          //     model: Product,
+          //     include: "product",
+          //   },
+          // ],
+        },
+      ],
+    });
 
-  res.send(users);
+    res.send(users);
+  } catch (e) {
+    res.status(500).send(e);
+  }
 };
 
 module.exports = { index };

@@ -35,19 +35,9 @@ const create = async (req, res) => {
         },
       ],
     });
-    console.log("userProducts");
-    console.log("userProducts");
-    console.log("userProducts");
-    console.log("userProducts");
-    console.log("userProducts");
-    console.log(userProducts);
-    console.log("userProducts");
-    console.log("userProducts");
-    console.log("userProducts");
-    console.log("userProducts");
-    console.log("userProducts");
+
     const order = await Order.create({
-      user_id: user.id,
+      UserId: user.id,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       country: req.body.country,
