@@ -6,12 +6,9 @@ const index = async (req, res) => {
       include: [
         {
           model: Product,
-          as: "items",
-          include: "product",
         },
         {
           model: User,
-          as: "user",
         },
       ],
     });

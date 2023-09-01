@@ -279,6 +279,10 @@ User.hasMany(Order, {
   foreignKey: "UserId",
 });
 
+Product.hasMany(View, {
+  foreignKey: "ProductId",
+});
+
 // View.belongsTo(User, {
 //   foreignKey: "UserId",
 // });

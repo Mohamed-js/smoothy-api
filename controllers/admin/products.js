@@ -1,24 +1,17 @@
+const { Op } = require("sequelize");
 const { slugify, uploadImage } = require("../../helpers");
 const { Product, View } = require("../../models/schema");
 
 const index = async (req, res) => {
   try {
-    const views = await View.findAll({
-      where: {
-        product: {
-          [Op.not]: null,
-        },
-      },
-      attributes: ["product", [sequelize.fn("sum", 1), "views"]],
-      group: ["product"],
-    });
-
-    const productIds = views.map((view) => view.product);
     const products = await Product.findAll({
-      where: {
-        id: productIds,
-      },
+      include: [
+        {
+          model: View,
+        },
+      ],
     });
+    // const ids = products.map((product) => product.id);
 
     res.send(products);
   } catch (e) {

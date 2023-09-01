@@ -9,9 +9,11 @@ const index = async (req, res) => {
           // include: [
           //   {
           //     model: Product,
-          //     include: "product",
           //   },
           // ],
+        },
+        {
+          model: Product,
         },
       ],
     });
