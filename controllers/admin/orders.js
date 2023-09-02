@@ -13,6 +13,7 @@ const index = async (req, res) => {
       ],
     });
 
+    console.log(orders);
     res.send(orders);
   } catch (e) {
     res.status(500).send(e);

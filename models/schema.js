@@ -137,7 +137,27 @@ const Product = sequelize.define("product", {
     validate: {
       len: {
         args: [3],
-        msg: "Product name must not be less than 3 characters.",
+        msg: "Product slug must not be less than 3 characters.",
+      },
+    },
+  },
+  category: {
+    type: DataTypes.STRING,
+
+    validate: {
+      len: {
+        args: [3],
+        msg: "Product category must not be less than 3 characters.",
+      },
+    },
+  },
+  ar_category: {
+    type: DataTypes.STRING,
+
+    validate: {
+      len: {
+        args: [3],
+        msg: "Product ar_category must not be less than 3 characters.",
       },
     },
   },
@@ -162,6 +182,46 @@ const Product = sequelize.define("product", {
       len: {
         args: [3],
         msg: "Product description must not be less than 3 characters.",
+      },
+    },
+  },
+  usage: {
+    type: DataTypes.STRING,
+
+    validate: {
+      len: {
+        args: [3],
+        msg: "Product usage must not be less than 3 characters.",
+      },
+    },
+  },
+  ar_usage: {
+    type: DataTypes.STRING,
+
+    validate: {
+      len: {
+        args: [3],
+        msg: "Product usage must not be less than 3 characters.",
+      },
+    },
+  },
+  ingredients: {
+    type: DataTypes.STRING,
+
+    validate: {
+      len: {
+        args: [3],
+        msg: "Product ingredients must not be less than 3 characters.",
+      },
+    },
+  },
+  ar_ingredients: {
+    type: DataTypes.STRING,
+
+    validate: {
+      len: {
+        args: [3],
+        msg: "Product ingredients must not be less than 3 characters.",
       },
     },
   },

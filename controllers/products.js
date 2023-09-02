@@ -2,7 +2,10 @@ const { Product } = require("../models/schema");
 
 const index = async (req, res) => {
   try {
+    Product.sync();
     const products = await Product.findAll();
+
+    console.log(products);
     res.send(products);
   } catch (e) {
     res.status(500).send(e);
