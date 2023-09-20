@@ -2,7 +2,6 @@ const { Product } = require("../models/schema");
 
 const index = async (req, res) => {
   try {
-    Product.sync();
     const products = await Product.findAll();
 
     res.send(products);
