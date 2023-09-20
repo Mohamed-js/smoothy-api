@@ -5,7 +5,6 @@ const index = async (req, res) => {
     Product.sync();
     const products = await Product.findAll();
 
-    console.log(products);
     res.send(products);
   } catch (e) {
     res.status(500).send(e);
