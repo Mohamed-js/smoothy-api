@@ -12,6 +12,7 @@ const auth = require("./auth");
 const adminProducts = require("./admin/products");
 const adminUsers = require("./admin/users");
 const adminOrders = require("./admin/orders");
+const adminPromoCodes = require("./admin/promocodes");
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(orders);
 app.use(auth);
 
 // Admin routes
-app.use("/admin", [adminProducts, adminUsers, adminOrders]);
+app.use("/admin", [adminProducts, adminUsers, adminOrders, adminPromoCodes]);
 
 // Set the root
 app.get("/", (req, res) => {

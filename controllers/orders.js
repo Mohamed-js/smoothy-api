@@ -25,8 +25,9 @@ const index = async (req, res) => {
 const create = async (req, res) => {
   try {
     const user = await getUser(req);
+
     let promoCode;
-    if (req.body.promo_code.trim()) {
+    if (req.body.promo_code && req.body.promo_code.trim()) {
       promoCode = await PromoCode.findOne({
         where: {
           code: req.body.promo_code,
@@ -67,8 +68,8 @@ const create = async (req, res) => {
     const order = await Order.create({
       UserId: user.id,
       first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      country: req.body.country,
+      // last_name: req.body.last_name,
+      // country: req.body.country,
       city: req.body.city,
       phone: req.body.phone,
       address: req.body.address,
@@ -83,7 +84,6 @@ const create = async (req, res) => {
         quantity: item.quantity,
         options: item.options,
       });
-      console.log(orderItem);
     });
 
     await UserProduct.destroy({
