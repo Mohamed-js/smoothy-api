@@ -4,6 +4,7 @@ const {
   Order,
   OrderItem,
   Product,
+  PromoCode,
 } = require("../models/schema");
 
 const { getIO } = require("../socket");
@@ -24,6 +25,33 @@ const index = async (req, res) => {
 const create = async (req, res) => {
   try {
     const user = await getUser(req);
+    let promoCode;
+    if (req.body.promo_code.trim()) {
+      promoCode = await PromoCode.findOne({
+        where: {
+          code: req.body.promo_code,
+        },
+      });
+
+      // Check validity
+      if (!promoCode) {
+        return res.send({ error: "invalid promocode" });
+      }
+
+      if (promoCode && promoCode.isOutdated) {
+        return res.send({ error: "outdated promocode" });
+      }
+
+      if (promoCode && promoCode.usageTimes === 0) {
+        return res.send({ error: "consumed promocode" });
+      }
+
+      // Minus if by period
+      if (promoCode.type === "by_usage") {
+        promoCode.usageTimes -= 1;
+        promoCode.save();
+      }
+    }
 
     const userProducts = await UserProduct.findAll({
       where: {
@@ -44,6 +72,8 @@ const create = async (req, res) => {
       city: req.body.city,
       phone: req.body.phone,
       address: req.body.address,
+      promo_code: promoCode ? promoCode.code : "",
+      discount: promoCode ? promoCode.discount : "",
     });
 
     userProducts.forEach(async (item) => {

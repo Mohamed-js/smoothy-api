@@ -54,6 +54,38 @@ const { sequelize } = require("../config");
 //   }
 // );
 
+const PromoCode = sequelize.define("promo_code", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    field: "PromoCodeId",
+    autoIncrement: true,
+  },
+  code: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  discount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  // by_period || by_usage
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  usageTimes: {
+    type: DataTypes.INTEGER,
+  },
+  periodInDays: {
+    type: DataTypes.INTEGER,
+  },
+  isOutdated: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+});
+
 const Order = sequelize.define(
   "order",
   {
@@ -86,6 +118,12 @@ const Order = sequelize.define(
       type: DataTypes.STRING,
     },
     address: {
+      type: DataTypes.STRING,
+    },
+    promo_code: {
+      type: DataTypes.STRING,
+    },
+    discount: {
       type: DataTypes.STRING,
     },
   },
@@ -289,10 +327,10 @@ const View = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    ProductId: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
+    // ProductId: {
+    //   type: DataTypes.INTEGER,
+    //   defaultValue: 0,
+    // },
     isHomePage: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -353,12 +391,13 @@ Product.hasMany(View, {
 
 // SYNC ALL
 // BlogPost.sync();
-Order.sync();
-OrderItem.sync();
-Product.sync();
-User.sync();
-UserProduct.sync();
-View.sync();
+Order.sync({ alter: true });
+OrderItem.sync({ alter: true });
+Product.sync({ alter: true });
+User.sync({ alter: true });
+UserProduct.sync({ alter: true });
+View.sync({ alter: true });
+PromoCode.sync({ alter: true });
 
 // EXPORT ALL
 module.exports = {
@@ -369,4 +408,5 @@ module.exports = {
   User,
   UserProduct,
   View,
+  PromoCode,
 };
