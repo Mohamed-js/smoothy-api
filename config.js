@@ -21,12 +21,4 @@ const connectDB = async (req, res, next) => {
   next();
 };
 
-function closeSequelizeConnection(req, res, next) {
-  res.on("finish", () => {
-    console.log("Connection has been closed successfully.");
-    sequelize.close(); // Close the connection after response is sent
-  });
-  next();
-}
-
-module.exports = { connectDB, sequelize, closeSequelizeConnection };
+module.exports = { connectDB, sequelize };
